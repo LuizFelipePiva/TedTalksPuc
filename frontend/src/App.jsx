@@ -1,18 +1,24 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+
+import MainPage from "./features/MainPage/Pages/MainPage";
+import Login from "./features/Login/Pages/Login";
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
     <>
       <div>
-          <h1>TedTalks PUCTEC</h1>
-
-
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="/main" element={<MainPage />}/>
+          </Routes>
+        </BrowserRouter>
       </div>
     </>
   )
