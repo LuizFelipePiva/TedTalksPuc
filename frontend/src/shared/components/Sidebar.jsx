@@ -1,14 +1,23 @@
-import { FaHome, FaListAlt } from "react-icons/fa";
+import { FaHome, FaListAlt, FaSignOutAlt, FaUserPlus } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const menuItems = [
-  { label: "Cadastrar tópicos", path: "/main", icon: FaHome },
-  { label: "Meus tópicos", path: "/show-topics", icon: FaListAlt },
-];
+import { clearSession, getSession } from "../lib/session";
 
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const session = getSession();
+  const menuItems = [
+    { label: "Cadastrar tópicos", path: "/main", icon: FaHome },
+    { label: "Meus tópicos", path: "/show-topics", icon: FaListAlt },
+    ...(session?.role === "admin"
+      ? [{ label: "Gerar usuários", path: "/superadmin", icon: FaUserPlus }]
+      : []),
+  ];
+
+  function handleLogout() {
+    clearSession();
+    navigate("/", { replace: true });
+  }
 
   return (
     <aside className="w-full shrink-0 border-b border-[#c9d8e8] bg-[#fffdf8] p-4 lg:min-h-screen lg:w-64 lg:border-b-0 lg:border-r lg:p-6">
@@ -37,6 +46,14 @@ export default function Sidebar() {
               </button>
             );
           })}
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold text-[#53627a] transition hover:bg-[#e6eef8] hover:text-[#1555a0] lg:w-full"
+          >
+            <FaSignOutAlt aria-hidden="true" />
+            <span className="hidden sm:inline lg:inline">Sair</span>
+          </button>
         </nav>
       </div>
     </aside>
